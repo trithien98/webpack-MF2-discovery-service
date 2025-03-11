@@ -1,30 +1,22 @@
 {
-  "name": "discovery-service-mf-2.0-catalogue",
+  "name": "user-details",
   "version": "1.0.0",
-  "description": "Discovery Service for Micro-Frontends 2.0",
-  "main": "index.js",
   "scripts": {
     "start": "webpack-cli serve",
     "build": "webpack --mode production",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "serve dist -p 2002"
+    "serve": "serve dist -p 2004"
   },
-  "keywords": [
-    "micro-frontends",
-    "discovery",
-    "service"
-  ],
   "author": "Luca Mezzalira",
   "license": "ISC",
   "dependencies": {
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^6.21.3"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/preset-react": "^7.26.3",
-    "@module-federation/enhanced": "^0.8.9",
+    "@module-federation/enhanced": "^0.10.0",
     "babel-loader": "^9.2.1",
     "html-webpack-plugin": "^5.6.3",
     "serve": "^14.2.4",

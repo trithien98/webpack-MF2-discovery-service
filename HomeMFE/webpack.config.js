@@ -7,35 +7,37 @@ module.exports = {
     mode: 'development',
     devServer: {
         static: {
-        directory: path.join(__dirname, 'dist'),
+            directory: path.join(__dirname, 'dist'),
         },
         port: 2001,
+        historyApiFallback: true,
+        hot: false,
+        liveReload: false
     },
     output: {
         publicPath: 'auto',
+        clean: true
     },
     module: {
         rules: [
-        {
-            test: /\.m?js$/,
-            type: 'javascript/auto',
-            resolve: {
-            fullySpecified: false,
+            {
+                test: /\.m?js$/,
+                type: 'javascript/auto',
+                resolve: {
+                    fullySpecified: false,
+                },
             },
-        },
-        {
-            test: /\.jsx?$/,
-            loader: 'babel-loader',
-            exclude: /node_modules/,
-            options: {
-            presets: ['@babel/preset-react'],
-            },
-        }],
+            {
+                test: /\.jsx?$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                options: {
+                    presets: ['@babel/preset-react'],
+                },
+            }
+        ],
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            template: './public/index.html',
-        }),
         new ModuleFederationPlugin({
             name: 'HomeMFE',
             filename: 'remoteEntry.js',
@@ -45,14 +47,23 @@ module.exports = {
             shared: {
                 react: {
                     singleton: true,
+                    eager: true,
+                    requiredVersion: '18.2.0'
                 },
                 'react-dom': {
                     singleton: true,
+                    eager: true,
+                    requiredVersion: '18.2.0'
                 },
                 'react-router-dom': {
                     singleton: true,
-                },
+                    eager: true,
+                    requiredVersion: '6.21.3'
+                }
             },
+        }),
+        new HtmlWebpackPlugin({
+            template: './public/index.html',
         }),
     ],
 };

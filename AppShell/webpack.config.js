@@ -7,7 +7,7 @@ module.exports = {
     mode: 'development',
     devServer: {
         static: {
-        directory: path.join(__dirname, 'dist'),
+            directory: path.join(__dirname, 'dist'),
         },
         port: 2000,
     },
@@ -16,21 +16,27 @@ module.exports = {
     },
     module: {
         rules: [
-        {
-            test: /\.m?js$/,
-            type: 'javascript/auto',
-            resolve: {
-            fullySpecified: false,
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader'],
             },
-        },
-        {
-            test: /\.jsx?$/,
-            loader: 'babel-loader',
-             exclude: /node_modules/,
-            options: {
-            presets: ['@babel/preset-react'],
+            {
+                test: /\.m?js$/,
+                type: 'javascript/auto',
+                resolve: {
+                    fullySpecified: false,
+                },
             },
-        }],
+            {
+                test: /\.jsx?$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                options: {
+                    presets: ['@babel/preset-react', '@babel/preset-env'],
+                    plugins: ['@babel/plugin-transform-runtime'],
+                },
+            }
+        ],
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -41,17 +47,20 @@ module.exports = {
             shared: {
                 react: {
                     singleton: true,
-                    requiredVersion: '^19.0.0',
+                    eager: true,
+                    requiredVersion: '18.2.0'
                 },
                 'react-dom': {
                     singleton: true,
-                    requiredVersion: '^19.0.0',
+                    eager: true,
+                    requiredVersion: '18.2.0'
                 },
                 'react-router-dom': {
                     singleton: true,
-                    requiredVersion: '^6.21.3',
-                },
-            },
-        }),
+                    eager: true,
+                    requiredVersion: '6.21.3'
+                }
+            }
+        })
     ],
 };

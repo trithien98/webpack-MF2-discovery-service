@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import SignIn from './components/SignIn';
 
 const Header = () => {
   return (
@@ -80,6 +81,23 @@ const Header = () => {
                   Catalogue
                 </Link>
               </li>
+              <li>
+                <Link 
+                  to="/my-account" 
+                  style={{ 
+                    textDecoration: 'none', 
+                    color: '#4a5568',
+                    fontWeight: 500,
+                    transition: 'color 0.2s ease',
+                    ':hover': { color: '#2d3748' }
+                  }}
+                >
+                  My Account
+                </Link>
+              </li>
+              <li>
+                <SignIn />
+              </li>
             </ul>
           </nav>
         </div>
@@ -91,7 +109,7 @@ const Header = () => {
           maxWidth: '400px',
           textAlign: 'right'
         }}>
-          "Life is too short to wear boring clothes"
+          "Life is too short to wear boring clothes!"
         </div>
       </div>
     </header>

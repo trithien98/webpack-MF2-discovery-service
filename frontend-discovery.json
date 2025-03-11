@@ -30,6 +30,36 @@
           "route": "/catalogue/*"
         }
       }
+    ],
+    "MyAccountMFE": [
+      {
+        "url": "http://localhost:2003/remoteEntry.js",
+        "metadata": {
+          "integrity": "sha256-initial",
+          "version": "1.0.0"
+        },
+        "extras": {
+          "name": "myAccountMFE",
+          "alias": "MyAccountMFE",
+          "exposed": "MFE",
+          "route": "/my-account/*"
+        }
+      }
+    ],
+    
+    "UserPaymentMethodsMFE": [
+      {
+        "url": "http://localhost:2005/remoteEntry.js",
+        "metadata": {
+          "integrity": "sha256-initial",
+          "version": "1.0.0"
+        },
+        "extras": {
+          "name": "UserPaymentMethodsMFE",
+          "alias": "UserPaymentMethodsMFE",
+          "exposed": "MFE"
+        }
+      }
     ]
   }
 } 
