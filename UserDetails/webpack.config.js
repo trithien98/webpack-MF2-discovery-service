@@ -9,7 +9,7 @@ module.exports = {
     clean: true
   },
   devServer: {
-    port: 2004,  // Assuming this is the port for UserDetails
+    port: 2004, 
     historyApiFallback: true,
     hot: false,
     liveReload: false
@@ -38,19 +38,7 @@ module.exports = {
       name: 'UserDetailsMFE',
       filename: 'remoteEntry.js',
       exposes: {
-        './MFE': './src/UserDetails',  // Expose UserDetails directly
-      },
-      shared: {
-        react: { 
-          singleton: true,
-          eager: true,
-          requiredVersion: '18.2.0'
-        },
-        'react-dom': { 
-          singleton: true,
-          eager: true,
-          requiredVersion: '18.2.0'
-        }
+        './MFE': './src/UserDetails',
       }
     }),
     new HtmlWebpackPlugin({

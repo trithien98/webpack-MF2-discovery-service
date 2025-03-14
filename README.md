@@ -181,3 +181,77 @@ This project demonstrates a micro-frontend architecture using Module Federation,
 - **Event Emitter Instances**: Ensure the same event emitter instance is used across all MFEs by passing it through props.
 
 ### 7. Project Structure 
+
+### 11. Multiple React Versions
+
+One of the powerful features of Module Federation is the ability to run different React versions simultaneously in different MFEs. This is achieved through proper webpack configuration:
+
+- **Isolated React Instances**: Each MFE can use its own React version by removing it from the shared dependencies:
+  ```javascript
+  // MFE with isolated React 17
+  // webpack.config.js
+  new ModuleFederationPlugin({
+    name: 'UserDetailsMFE',
+    filename: 'remoteEntry.js',
+    exposes: {
+      './MFE': './src/UserDetails',
+    }
+    // No shared section - React lives in its own container
+  })
+
+  // MFE using shared React 18
+  // webpack.config.js
+  new ModuleFederationPlugin({
+    name: 'UserPaymentsMFE',
+    filename: 'remoteEntry.js',
+    exposes: {
+      './MFE': './src/UserPaymentMethods',
+    },
+    shared: {
+      react: { 
+        singleton: true,
+        eager: true,
+        requiredVersion: '18.2.0'
+      },
+      'react-dom': { 
+        singleton: true,
+        eager: true,
+        requiredVersion: '18.2.0'
+      }
+    }
+  })
+  ```
+
+- **Benefits**:
+  - Each React version lives in its own container scope, not in global scope
+  - No version conflicts between different MFEs
+  - Enables gradual migrations (e.g., React 17 to 18)
+  - Teams can work independently with different React versions
+  - Perfect for testing new React versions in isolation
+
+- **Example Implementation**:
+  ```javascript
+  // Display React version in each MFE
+  import React from 'react';
+
+  class MyComponent extends React.Component {
+    render() {
+      return (
+        <div>
+          <div style={{
+            backgroundColor: '#f0f9ff',
+            padding: '0.5rem',
+            borderRadius: '4px',
+            marginBottom: '1rem',
+            display: 'inline-block'
+          }}>
+            React v{React.version}
+          </div>
+          {/* Rest of component */}
+        </div>
+      );
+    }
+  }
+  ```
+
+This configuration demonstrates how Module Federation enables true independence between MFEs, allowing different versions of core dependencies to coexist without conflict. 

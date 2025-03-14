@@ -39,6 +39,15 @@ class UserDetails extends React.Component {
 
     return (
       <div style={{ padding: '2rem' }}>
+        <div style={{
+          backgroundColor: '#f0f9ff',
+          padding: '0.5rem',
+          borderRadius: '4px',
+          marginBottom: '1rem',
+          display: 'inline-block'
+        }}>
+          React v{React.version}
+        </div>
         <h2>User Details</h2>
         <div style={{ 
           backgroundColor: 'white', 

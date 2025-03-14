@@ -38,7 +38,16 @@ class UserPaymentMethods extends React.Component {
 
   render() {
     return (
-      <div style={{ padding: '20px' }}>
+      <div style={{ padding: '2rem' }}>
+        <div style={{
+          backgroundColor: '#f0f9ff',
+          padding: '0.5rem',
+          borderRadius: '4px',
+          marginBottom: '1rem',
+          display: 'inline-block'
+        }}>
+          React v{React.version}
+        </div>
         <h2>Payment Methods</h2>
         <div style={{ display: 'grid', gap: '20px', marginTop: '20px' }}>
           {this.state.paymentMethods.map((method) => (
