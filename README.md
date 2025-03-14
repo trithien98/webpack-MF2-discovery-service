@@ -180,9 +180,7 @@ This project demonstrates a micro-frontend architecture using Module Federation,
 
 - **Event Emitter Instances**: Ensure the same event emitter instance is used across all MFEs by passing it through props.
 
-### 7. Project Structure 
-
-### 11. Multiple React Versions
+### 6. Multiple React Versions
 
 One of the powerful features of Module Federation is the ability to run different React versions simultaneously in different MFEs. This is achieved through proper webpack configuration:
 
@@ -256,7 +254,7 @@ One of the powerful features of Module Federation is the ability to run differen
 
 This configuration demonstrates how Module Federation enables true independence between MFEs, allowing different versions of core dependencies to coexist without conflict. 
 
-### 12. Inspecting Shared Resources
+### 7. Inspecting Shared Resources
 
 Module Federation 2.0 provides a way to inspect shared resources through the browser's developer tools. All shared resources are available in:
 
