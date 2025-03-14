@@ -3,50 +3,55 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 
 module.exports = {
   mode: 'development',
+  entry: './src/index.js',
   output: {
-    publicPath: 'http://localhost:2004/',
+    publicPath: 'auto',
+    clean: true
   },
   devServer: {
-    port: 2004,
-    historyApiFallback: {
-      index: '/index.html',
-    },
+    port: 2004,  // Assuming this is the port for UserDetails
+    historyApiFallback: true,
+    hot: false,
+    liveReload: false
   },
   module: {
     rules: [
-        {
-            test: /\.m?js$/,
-            type: 'javascript/auto',
-            resolve: {
-            fullySpecified: false,
-            },
+      {
+        test: /\.m?js$/,
+        type: 'javascript/auto',
+        resolve: {
+          fullySpecified: false,
         },
-        {
-            test: /\.jsx?$/,
-            loader: 'babel-loader',
-            exclude: /node_modules/,
-            options: {
-            presets: ['@babel/preset-react'],
-            },
-        }],
+      },
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        options: {
+          presets: ['@babel/preset-react'],
+        },
+      }
+    ],
   },
   plugins: [
     new ModuleFederationPlugin({
       name: 'UserDetailsMFE',
       filename: 'remoteEntry.js',
       exposes: {
-        './MFE': './src/App',
+        './MFE': './src/UserDetails',  // Expose UserDetails directly
       },
       shared: {
-        react: {
+        react: { 
           singleton: true,
-          // requiredVersion: "^19.0.0",
+          eager: true,
+          requiredVersion: '18.2.0'
         },
-        "react-dom": {
+        'react-dom': { 
           singleton: true,
-          // requiredVersion: "^19.0.0",
-        },
-      },
+          eager: true,
+          requiredVersion: '18.2.0'
+        }
+      }
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html',

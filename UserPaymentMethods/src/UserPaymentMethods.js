@@ -1,57 +1,37 @@
 import React from 'react';
 
-const initialPaymentMethods = [
-  {
-    id: 1,
-    type: 'Visa',
-    last4: '4242',
-    expiryMonth: '12',
-    expiryYear: '2024',
-    isDefault: true,
-  },
-  {
-    id: 2,
-    type: 'Mastercard',
-    last4: '5555',
-    expiryMonth: '03',
-    expiryYear: '2025',
-    isDefault: false,
-  },
-  {
-    id: 3,
-    type: 'American Express',
-    last4: '0005',
-    expiryMonth: '08',
-    expiryYear: '2026',
-    isDefault: false,
-  },
-];
+// Create a context to match what AppShell will provide
+const EmitterContext = React.createContext();
 
 class UserPaymentMethods extends React.Component {
+
   state = {
-    paymentMethods: initialPaymentMethods
+    paymentMethods: [
+      { id: 1, last4: '4242', brand: 'Visa', isDefault: true },
+      { id: 2, last4: '5555', brand: 'Mastercard', isDefault: false },
+      { id: 3, last4: '3782', brand: 'American Express', isDefault: false }
+    ]
   };
 
   handleMakeDefault = (id) => {
-    this.setState(state => ({
-      paymentMethods: state.paymentMethods.map(method => ({
+    const { emitter } = this.props;
+
+    this.setState(prevState => ({
+      paymentMethods: prevState.paymentMethods.map(method => ({
         ...method,
         isDefault: method.id === id
       }))
     }), () => {
-      const newDefault = this.state.paymentMethods.find(method => method.id === id);
-      
-      // Emit the event for MyAccount
-      if (this.props.emitter) {
-        this.props.emitter.emit('payment-method-changed', newDefault);
-      }
-
-      // Show notification through AppShell
-      if (this.props.notificationService) {
-        this.props.notificationService.showNotification(
-          'Payment Method Updated',
-          `Your default payment method has been changed to ${newDefault.type} ending in ${newDefault.last4}`
-        );
+      const defaultMethod = this.state.paymentMethods.find(m => m.id === id);
+      if (emitter) {
+        const notification = {
+          type: 'success',
+          title: 'Payment Method Updated',
+          message: `${defaultMethod.brand} ending in ${defaultMethod.last4} is now your default payment method.`
+        };
+        console.log('notification msg', notification);
+        
+        emitter.emit('notification', notification);
       }
     });
   };
@@ -75,10 +55,7 @@ class UserPaymentMethods extends React.Component {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontSize: '18px', fontWeight: '500' }}>
-                    {method.type} ending in {method.last4}
-                  </div>
-                  <div style={{ color: '#666', marginTop: '5px' }}>
-                    Expires {method.expiryMonth}/{method.expiryYear}
+                    {method.brand} ending in {method.last4}
                   </div>
                 </div>
                 <div>

@@ -39,81 +39,85 @@ class App extends React.Component {
           </div>
         </div>
 
-        <div className="bestsellers" style={{ marginBottom: '4rem' }}>
-          <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>Best Sellers</h2>
-          <div style={{ 
-            display: 'flex',
-            overflowX: 'auto',
-            gap: '2rem',
-            padding: '1rem'
-          }}>
-            {[
-              { id: 1, title: 'Cosmic Cat', image: 'https://picsum.photos/seed/cat/300/300' },
-              { id: 2, title: 'Pizza Ninja', image: 'https://picsum.photos/seed/ninja/300/300' },
-              { id: 3, title: 'Pixel Art Gaming', image: 'https://picsum.photos/seed/pixel/300/300' }
-            ].map(product => (
-              <div key={product.id} style={{ minWidth: '250px', textAlign: 'center' }}>
-                <img 
-                  src={product.image} 
-                  alt={product.title}
-                  style={{ width: '100%', borderRadius: '8px' }}
-                />
-                <h3 style={{ marginTop: '1rem' }}>{product.title}</h3>
-                <button 
-                  onClick={() => this.handleViewDetails(product.id)}
-                  style={{
-                    backgroundColor: '#4299e1',
-                    color: 'white',
-                    padding: '0.5rem 1rem',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    marginTop: '0.5rem'
-                  }}
-                >
-                  View Details
-                </button>
-              </div>
-            ))}
+        <div style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto',
+          padding: '0 2rem'
+        }}>
+          <div className="bestsellers" style={{ marginBottom: '4rem' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>Best Sellers</h2>
+            <div style={{ 
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '2rem'
+            }}>
+              {[
+                { id: 1, title: 'Cosmic Cat', image: 'https://picsum.photos/seed/cat/300/300' },
+                { id: 2, title: 'Pizza Ninja', image: 'https://picsum.photos/seed/ninja/300/300' },
+                { id: 3, title: 'Pixel Art Gaming', image: 'https://picsum.photos/seed/pixel/300/300' }
+              ].map(product => (
+                <div key={product.id} style={{ minWidth: '250px', textAlign: 'center' }}>
+                  <img 
+                    src={product.image} 
+                    alt={product.title}
+                    style={{ width: '100%', borderRadius: '8px' }}
+                  />
+                  <h3 style={{ marginTop: '1rem' }}>{product.title}</h3>
+                  <button 
+                    onClick={() => this.handleViewDetails(product.id)}
+                    style={{
+                      backgroundColor: '#4299e1',
+                      color: 'white',
+                      padding: '0.5rem 1rem',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      marginTop: '0.5rem'
+                    }}
+                  >
+                    View Details
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="new-arrivals">
-          <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>New Arrivals</h2>
-          <div style={{ 
-            display: 'flex',
-            overflowX: 'auto',
-            gap: '2rem',
-            padding: '1rem'
-          }}>
-            {[
-              { id: 4, title: 'Robot DJ', image: 'https://picsum.photos/seed/robot/300/300' },
-              { id: 5, title: 'Zombie Unicorn', image: 'https://picsum.photos/seed/zombie/300/300' },
-              { id: 6, title: 'Taco Dragon', image: 'https://picsum.photos/seed/dragon/300/300' }
-            ].map(product => (
-              <div key={product.id} style={{ minWidth: '250px', textAlign: 'center' }}>
-                <img 
-                  src={product.image} 
-                  alt={product.title}
-                  style={{ width: '100%', borderRadius: '8px' }}
-                />
-                <h3 style={{ marginTop: '1rem' }}>{product.title}</h3>
-                <button 
-                  onClick={() => this.handleViewDetails(product.id)}
-                  style={{
-                    backgroundColor: '#4299e1',
-                    color: 'white',
-                    padding: '0.5rem 1rem',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    marginTop: '0.5rem'
-                  }}
-                >
-                  View Details
-                </button>
-              </div>
-            ))}
+          <div className="new-arrivals">
+            <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>New Arrivals</h2>
+            <div style={{ 
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '2rem'
+            }}>
+              {[
+                { id: 4, title: 'Robot DJ', image: 'https://picsum.photos/seed/robot/300/300' },
+                { id: 5, title: 'Zombie Unicorn', image: 'https://picsum.photos/seed/zombie/300/300' },
+                { id: 6, title: 'Taco Dragon', image: 'https://picsum.photos/seed/dragon/300/300' }
+              ].map(product => (
+                <div key={product.id} style={{ minWidth: '250px', textAlign: 'center' }}>
+                  <img 
+                    src={product.image} 
+                    alt={product.title}
+                    style={{ width: '100%', borderRadius: '8px' }}
+                  />
+                  <h3 style={{ marginTop: '1rem' }}>{product.title}</h3>
+                  <button 
+                    onClick={() => this.handleViewDetails(product.id)}
+                    style={{
+                      backgroundColor: '#4299e1',
+                      color: 'white',
+                      padding: '0.5rem 1rem',
+                      border: 'none',
+                      borderRadius: '5px',
+                      cursor: 'pointer',
+                      marginTop: '0.5rem'
+                    }}
+                  >
+                    View Details
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </>

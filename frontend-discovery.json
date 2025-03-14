@@ -46,7 +46,20 @@
         }
       }
     ],
-    
+    "UserDetailsMFE": [
+      {
+        "url": "http://localhost:2004/remoteEntry.js",
+        "metadata": {
+          "integrity": "sha256-initial",
+          "version": "1.0.0"
+        },
+        "extras": {
+          "name": "UserDetailsMFE",
+          "alias": "UserDetailsMFE",
+          "exposed": "MFE"
+        }
+      }
+    ],
     "UserPaymentMethodsMFE": [
       {
         "url": "http://localhost:2005/remoteEntry.js",

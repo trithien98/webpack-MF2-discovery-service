@@ -4,8 +4,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Header';
 import Loading from './Loading';
 import NotificationModal from './components/NotificationModal';
-import { notificationService } from './services/notificationService';
+import emitter from './services/eventEmitter';
 import './index.css';
+// import setupFetch from './services/setupFetch';
 
 const System = ({ request }) => {
   if (!request) {
@@ -14,17 +15,14 @@ const System = ({ request }) => {
 
   const MFE = lazy(() => 
     loadRemote(request)
-      .then(module => {
-        const Component = module.default;
-        return {
-          default: (props) => React.createElement(Component, props)
-        };
-      })
+      .then(module => ({
+        default: module.default
+      }))
   );
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <MFE notificationService={notificationService} />
+      <MFE emitter={emitter} />
     </Suspense>
   );
 };
@@ -32,33 +30,16 @@ const System = ({ request }) => {
 class App extends React.Component {
   state = {
     routes: [],
-    isLoading: true,
-    notification: null
+    isLoading: true
   };
 
   async componentDidMount() {
-    // Add notification listener
-    notificationService.on('notification', this.handleNotification);
-    
-    // Initialize MFEs
     try {
       await this.initializeMFEs();
     } catch (error) {
       console.error('Failed to initialize MFEs:', error);
     }
   }
-
-  componentWillUnmount() {
-    notificationService.off('notification', this.handleNotification);
-  }
-
-  handleNotification = ({ title, message }) => {
-    this.setState({ notification: { title, message } });
-  };
-
-  closeNotification = () => {
-    this.setState({ notification: null });
-  };
 
   initializeMFEs = async () => {
     try {
@@ -75,13 +56,11 @@ class App extends React.Component {
       for (const [_, configs] of Object.entries(data.microFrontends)) {
         const config = configs[0];
         const { name, alias, exposed, route } = config.extras;
-        // register Module Federation remotes
         remotes.push({
           name,
           alias,
           entry: config.url
         });
-        // create dynamic routes for micro-frontends
         routeConfigs.push({
           path: route,
           request: `${name}/${exposed}`
@@ -100,7 +79,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { routes, isLoading, notification } = this.state;
+    const { routes, isLoading } = this.state;
 
     return (
       <Router>
@@ -129,13 +108,7 @@ class App extends React.Component {
               </Routes>
             )}
           </main>
-
-          <NotificationModal
-            isOpen={!!notification}
-            onClose={this.closeNotification}
-            title={notification?.title}
-            message={notification?.message}
-          />
+          <NotificationModal emitter={emitter} />
         </div>
       </Router>
     );

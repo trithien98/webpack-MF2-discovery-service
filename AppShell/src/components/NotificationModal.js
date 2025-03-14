@@ -1,71 +1,77 @@
 import React from 'react';
 
-const NotificationModal = ({ isOpen, onClose, title, message }) => {
-  if (!isOpen) return null;
+class NotificationModal extends React.Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 1001
-    }}>
+    this.state = {
+      isOpen: false,
+      type: 'info',
+      title: '',
+      message: ''
+    };
+  }
+
+  componentDidMount() {
+    const { emitter } = this.props;
+    emitter.on('notification', this.handleNotification);
+  }
+
+  componentWillUnmount() {
+    const { emitter } = this.props;
+    emitter.off('notification', this.handleNotification);
+  }
+
+  handleNotification = ({ type, title, message }) => {
+    console.log('Notification received:', { type, title, message });
+    this.setState({
+      isOpen: true,
+      type,
+      title,
+      message
+    });
+  };
+
+  handleClose = () => {
+    this.setState({ isOpen: false });
+  };
+
+  render() {
+    const { isOpen, type, title, message } = this.state;
+
+    if (!isOpen) return null;
+
+    return (
       <div style={{
-        backgroundColor: 'white',
-        padding: '2rem',
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+        backgroundColor: type === 'success' ? '#48bb78' : '#4299e1',
+        color: 'white',
+        padding: '15px',
         borderRadius: '8px',
-        width: '100%',
-        maxWidth: '400px',
-        position: 'relative'
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        maxWidth: '300px'
       }}>
-        <button
-          onClick={onClose}
+        <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>{title}</div>
+        <div>{message}</div>
+        <button 
+          onClick={this.handleClose}
           style={{
             position: 'absolute',
-            right: '1rem',
-            top: '1rem',
+            top: '10px',
+            right: '10px',
             background: 'none',
             border: 'none',
-            fontSize: '1.5rem',
+            color: 'white',
             cursor: 'pointer'
           }}
         >
-          ×
-        </button>
-        
-        <h2 style={{ marginTop: 0, marginBottom: '1.5rem' }}>{title}</h2>
-        
-        <div style={{
-          marginBottom: '1.5rem',
-          color: '#4a5568'
-        }}>
-          {message}
-        </div>
-
-        <button
-          onClick={onClose}
-          style={{
-            width: '100%',
-            padding: '0.75rem',
-            backgroundColor: '#4299e1',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 500
-          }}
-        >
-          OK
+          ✕
         </button>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default NotificationModal; 

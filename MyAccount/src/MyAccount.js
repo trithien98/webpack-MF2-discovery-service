@@ -1,8 +1,7 @@
 import React from 'react';
 import { loadRemote, init, registerRemotes } from '@module-federation/runtime';
-import emitter from './services/eventEmitter';
 
-const System = ({ request }) => {
+const System = ({ request, emitter }) => {
   if (!request) return null;
   
   const MFE = React.lazy(() => loadRemote(request).then(component => {
@@ -14,9 +13,7 @@ const System = ({ request }) => {
     <React.Suspense fallback={<div style={{padding: '20px', background: '#eee'}}>
       Loading MFE...
     </div>}>
-      <div style={{border: '1px solid red', padding: '10px'}}>
         <MFE emitter={emitter} />
-      </div>
     </React.Suspense>
   );
 };
@@ -30,19 +27,18 @@ class MyAccount extends React.Component {
 
   async componentDidMount() {
     try {
-      console.log('Starting MFE load');
+
       await init({
         name: 'myAccount',
       });
 
       const response = await fetch('http://127.0.0.1:8080/frontend-discovery.json');
       const data = await response.json();
-      console.log('Discovery data:', data);
 
       const userMfes = [
+        data.microFrontends.UserDetailsMFE[0],
         data.microFrontends.UserPaymentMethodsMFE[0],
       ];
-      console.log('MFEs to load:', userMfes);
 
       await registerRemotes(
         userMfes.map(mfe => ({
@@ -80,7 +76,7 @@ class MyAccount extends React.Component {
           gap: '20px' 
         }}>
           {mfeRequests.map(request => (
-            <System key={request} request={request} />
+            <System key={request} request={request} emitter={this.props.emitter} />
           ))}
         </div>
       </div>

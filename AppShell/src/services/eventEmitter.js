@@ -1,7 +1,6 @@
 import { EventEmitter } from 'tseep';
 
-// Define the event types that can be emitted/listened to
+// Create a singleton instance of the event emitter
 const emitter = new EventEmitter();
 
-// Export the emitter instance
 export default emitter; 

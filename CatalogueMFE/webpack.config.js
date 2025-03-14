@@ -7,12 +7,16 @@ module.exports = {
     mode: 'development',
     devServer: {
         static: {
-        directory: path.join(__dirname, 'dist'),
+            directory: path.join(__dirname, 'dist'),
         },
         port: 2002,
+        historyApiFallback: true,
+        hot: false,
+        liveReload: false
     },
     output: {
         publicPath: 'auto',
+        clean: true
     },
     module: {
         rules: [
@@ -45,13 +49,19 @@ module.exports = {
             shared: {
                 react: {
                     singleton: true,
+                    eager: true,
+                    requiredVersion: '18.2.0'
                 },
                 'react-dom': {
                     singleton: true,
+                    eager: true,
+                    requiredVersion: '18.2.0'
                 },
                 'react-router-dom': {
                     singleton: true,
-                },
+                    eager: true,
+                    requiredVersion: '6.21.3'
+                }
             },
         }),
     ],

@@ -44,6 +44,10 @@ module.exports = {
         }),
         new ModuleFederationPlugin({
             name: 'AppShell',
+            filename: 'remoteEntry.js',
+            exposes: {
+                './EmitterContext': './src/App'
+            },
             shared: {
                 react: {
                     singleton: true,
