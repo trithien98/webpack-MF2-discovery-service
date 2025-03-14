@@ -42,25 +42,20 @@ module.exports = {
             name: 'HomeMFE',
             filename: 'remoteEntry.js',
             exposes: {
-                './MFE': './src/App.js',
+                './MFE': './src/App'
             },
             shared: {
-                react: {
+                'react17': { 
+                    import: 'react',
                     singleton: true,
-                    eager: true,
-                    requiredVersion: '18.2.0'
+                    requiredVersion: '17.0.2'
                 },
-                'react-dom': {
+                'react17-dom': { 
+                    import: 'react-dom',
                     singleton: true,
-                    eager: true,
-                    requiredVersion: '18.2.0'
-                },
-                'react-router-dom': {
-                    singleton: true,
-                    eager: true,
-                    requiredVersion: '6.21.3'
+                    requiredVersion: '17.0.2'
                 }
-            },
+            }
         }),
         new HtmlWebpackPlugin({
             template: './public/index.html',

@@ -1,14 +1,24 @@
 import React from "react";
-import { withRouter } from "./withRouter";
 
 class App extends React.Component {
-  handleViewDetails = (productId) => {
-    this.props.navigate(`/catalogue/product/${productId}`);
+  handleViewDetails = (id) => {
+    if (this.props.router) {
+      this.props.router.navigate(`/catalogue/${id}`);
+    }
   };
 
   render() {
     return (
       <>
+        <div style={{
+          backgroundColor: '#f0f9ff',
+          padding: '0.5rem',
+          borderRadius: '4px',
+          marginBottom: '1rem',
+          display: 'inline-block'
+        }}>
+          React v{React.version}
+        </div>
         <div className="hero" style={{
           position: 'relative',
           height: '500px',
@@ -125,4 +135,4 @@ class App extends React.Component {
   }
 }
 
-export default withRouter(App);
+export default App;

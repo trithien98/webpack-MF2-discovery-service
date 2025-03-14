@@ -255,3 +255,48 @@ One of the powerful features of Module Federation is the ability to run differen
   ```
 
 This configuration demonstrates how Module Federation enables true independence between MFEs, allowing different versions of core dependencies to coexist without conflict. 
+
+### 12. Inspecting Shared Resources
+
+Module Federation 2.0 provides a way to inspect shared resources through the browser's developer tools. All shared resources are available in:
+
+```javascript
+window.__FEDERATION__.__SHARE__
+```
+
+This object contains:
+- All shared dependencies organized by MFE name
+- Version information for each shared resource
+- Current state of shared modules
+
+For example, you can inspect:
+```javascript
+// See all shared resources for HomeMFE
+window.__FEDERATION__.__SHARE__.HomeMFE
+
+// See all shared resources for UserDetailsMFE
+window.__FEDERATION__.__SHARE__.UserDetailsMFE
+```
+
+This is particularly useful for:
+- Debugging shared dependencies
+- Verifying correct version sharing
+- Confirming proper isolation of React versions (e.g., React 17 vs 18)
+- Understanding how Module Federation manages shared resources at runtime
+
+Example of what you might see:
+```javascript
+window.__FEDERATION__.__SHARE__.UserDetailsMFE
+{
+  'react17': { /* React 17 instance details */ },
+  'react17-dom': { /* ReactDOM 17 instance details */ }
+}
+
+window.__FEDERATION__.__SHARE__.UserPaymentsMFE
+{
+  'react': { /* React 18 instance details */ },
+  'react-dom': { /* ReactDOM 18 instance details */ }
+}
+```
+
+This inspection capability is essential for debugging and verifying proper sharing configuration in your micro-frontend architecture. 

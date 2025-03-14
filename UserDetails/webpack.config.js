@@ -39,6 +39,18 @@ module.exports = {
       filename: 'remoteEntry.js',
       exposes: {
         './MFE': './src/UserDetails',
+      },
+      shared: {
+        'react17': { 
+          import: 'react',
+          singleton: true,
+          requiredVersion: '17.0.2'
+        },
+        'react17-dom': { 
+          import: 'react-dom',
+          singleton: true,
+          requiredVersion: '17.0.2'
+        }
       }
     }),
     new HtmlWebpackPlugin({
