@@ -1,5 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModuleFederationPlugin = require('@module-federation/enhanced').ModuleFederationPlugin;
+const { ModuleFederationPlugin } = require('@module-federation/enhanced');
 const path = require('path');
 
 module.exports = {
@@ -43,26 +43,23 @@ module.exports = {
             template: './public/index.html'
         }),
         new ModuleFederationPlugin({
-            name: 'AppShell',
+            name: 'shell',
             filename: 'remoteEntry.js',
             exposes: {
                 './EmitterContext': './src/App'
             },
             shared: {
+                'react-router-dom': {
+                    singleton: true,
+                    requiredVersion: '6.21.3'
+                },
                 react: {
                     singleton: true,
-                    eager: true,
                     requiredVersion: '18.2.0'
                 },
                 'react-dom': {
                     singleton: true,
-                    eager: true,
                     requiredVersion: '18.2.0'
-                },
-                'react-router-dom': {
-                    singleton: true,
-                    eager: true,
-                    requiredVersion: '6.21.3'
                 }
             }
         })

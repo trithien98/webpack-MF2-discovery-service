@@ -1,5 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const { ModuleFederationPlugin } = require('@module-federation/enhanced');
 
 module.exports = {
   mode: 'development',
@@ -37,8 +37,9 @@ module.exports = {
     new ModuleFederationPlugin({
       name: 'UserDetailsMFE',
       filename: 'remoteEntry.js',
+      asyncStartup: true,
       exposes: {
-        './MFE': './src/UserDetails',
+        './MFE': './src/UserDetails'
       },
       shared: {
         'react17': { 

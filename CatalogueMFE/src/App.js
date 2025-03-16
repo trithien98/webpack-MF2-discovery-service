@@ -1,9 +1,8 @@
 import React from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import ProductDetails from './ProductDetails';
 
 const ProductList = () => {
-    const navigate = useNavigate();
     const products = [
         { id: 1, title: 'Cosmic Cat T-Shirt', price: '$25.99', image: 'https://picsum.photos/seed/cat/300/300' },
         { id: 2, title: 'Pizza Ninja T-Shirt', price: '$23.99', image: 'https://picsum.photos/seed/ninja/300/300' },
@@ -41,19 +40,21 @@ const ProductList = () => {
                         />
                         <h3>{product.title}</h3>
                         <p>{product.price}</p>
-                        <button 
-                            onClick={() => navigate(`product/${product.id}`)}
+                        <Link 
+                            to={`${product.id}`}
                             style={{
                                 backgroundColor: '#4299e1',
                                 color: 'white',
                                 padding: '0.5rem 1rem',
                                 border: 'none',
                                 borderRadius: '4px',
-                                cursor: 'pointer'
+                                cursor: 'pointer',
+                                textDecoration: 'none',
+                                display: 'inline-block'
                             }}
                         >
                             View Details
-                        </button>
+                        </Link>
                     </div>
                 ))}
             </div>
@@ -61,13 +62,27 @@ const ProductList = () => {
     );
 };
 
-const App = () => {
-    return (
-        <Routes>
-            <Route path="/" element={<ProductList />} />
-            <Route path="product/:id" element={<ProductDetails />} />
-        </Routes>
-    );
-};
+class App extends React.Component {
+    render() {
+
+        return (
+            <>
+                <div style={{
+                    backgroundColor: '#f0f9ff',
+                    padding: '0.5rem',
+                    borderRadius: '4px',
+                    marginBottom: '1rem',
+                    display: 'inline-block'
+                }}>
+                    React v{React.version}
+                </div>
+                <Routes>
+                    <Route path=":id" element={<ProductDetails />} />
+                    <Route path="/*" element={<ProductList />} />
+                </Routes>
+            </>
+        );
+    }
+}
 
 export default App;

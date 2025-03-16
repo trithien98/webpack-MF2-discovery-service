@@ -55,7 +55,7 @@ class App extends React.Component {
       
       for (const [_, configs] of Object.entries(data.microFrontends)) {
         const config = configs[0];
-        const { name, alias, exposed, route } = config.extras;
+        const { name, alias, exposed, route, routes } = config.extras;
         remotes.push({
           name,
           alias,
@@ -65,6 +65,14 @@ class App extends React.Component {
           path: route,
           request: `${name}/${exposed}`
         });
+        if (routes) {
+          routes.forEach(dynamicRoute => {
+            routeConfigs.push({
+              path: dynamicRoute,
+              request: `${name}/${exposed}`
+            });
+          });
+        }
       }
 
       await registerRemotes(remotes);

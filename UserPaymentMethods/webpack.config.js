@@ -1,5 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const { ModuleFederationPlugin } = require('@module-federation/enhanced');
 
 module.exports = {
   mode: 'development',
@@ -37,23 +37,21 @@ module.exports = {
     new ModuleFederationPlugin({
       name: 'UserPaymentMethodsMFE',
       filename: 'remoteEntry.js',
+      asyncStartup: true,
       exposes: {
         './MFE': './src/UserPaymentMethods',
       },
       shared: {
         react: { 
           singleton: true,
-          eager: true,
           requiredVersion: '18.2.0'
         },
         'react-dom': { 
           singleton: true,
-          eager: true,
           requiredVersion: '18.2.0'
         },
         'react-router-dom': {
           singleton: true,
-          eager: true,
           requiredVersion: '6.21.3'
         }
       },

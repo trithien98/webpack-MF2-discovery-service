@@ -1,5 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModuleFederationPlugin = require('@module-federation/enhanced').ModuleFederationPlugin;
+const { ModuleFederationPlugin } = require('@module-federation/enhanced');
 const path = require('path');
 
 module.exports = {
@@ -41,10 +41,15 @@ module.exports = {
         new ModuleFederationPlugin({
             name: 'HomeMFE',
             filename: 'remoteEntry.js',
+            asyncStartup: true,
             exposes: {
                 './MFE': './src/App'
             },
             shared: {
+                'react-router-dom': {
+                    singleton: true,
+                    requiredVersion: '6.21.3'
+                },
                 'react17': { 
                     import: 'react',
                     singleton: true,

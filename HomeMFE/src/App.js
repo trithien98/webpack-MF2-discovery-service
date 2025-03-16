@@ -1,10 +1,9 @@
 import React from "react";
+import { withRouter } from './withRouter';
 
 class App extends React.Component {
   handleViewDetails = (id) => {
-    if (this.props.router) {
-      this.props.router.navigate(`/catalogue/${id}`);
-    }
+    this.props.navigate(`/catalogue/${id}`);
   };
 
   render() {
@@ -135,4 +134,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withRouter(App);

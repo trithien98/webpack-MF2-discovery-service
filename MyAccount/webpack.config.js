@@ -1,4 +1,4 @@
-const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const { ModuleFederationPlugin } = require('@module-federation/enhanced');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -34,21 +34,20 @@ module.exports = {
     },
   plugins: [
     new ModuleFederationPlugin({
-      name: 'myAccountMFE',
+      name: 'MyAccountMFE',
       filename: 'remoteEntry.js',
+      asyncStartup: true,
       exposes: {
-        './MFE': './src/MyAccount',
+        './MFE': './src/MyAccount'
       },
       shared: {
         react: { 
           singleton: true,
-          eager: true,
-          requiredVersion: '18.2.0'
+          requiredVersion: '18.2.0',
         },
         'react-dom': { 
           singleton: true,
-          eager: true,
-          requiredVersion: '18.2.0'
+          requiredVersion: '18.2.0',
         }
       }
     }),

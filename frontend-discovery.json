@@ -39,7 +39,7 @@
           "version": "1.0.0"
         },
         "extras": {
-          "name": "myAccountMFE",
+          "name": "MyAccountMFE",
           "alias": "MyAccountMFE",
           "exposed": "MFE",
           "route": "/my-account/*"

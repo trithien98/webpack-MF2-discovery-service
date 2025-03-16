@@ -1,5 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModuleFederationPlugin = require('@module-federation/enhanced').ModuleFederationPlugin;
+const { ModuleFederationPlugin } = require('@module-federation/enhanced');
 const path = require('path');
 
 module.exports = {
@@ -39,30 +39,28 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './public/index.html',
-        }),
+        }), 
         new ModuleFederationPlugin({
             name: 'CatalogueMFE',
             filename: 'remoteEntry.js',
+            asyncStartup: true,
             exposes: {
-                './MFE': './src/App.js',
+                './MFE': './src/App'
             },
             shared: {
-                react: {
-                    singleton: true,
-                    eager: true,
-                    requiredVersion: '18.2.0'
-                },
-                'react-dom': {
-                    singleton: true,
-                    eager: true,
-                    requiredVersion: '18.2.0'
-                },
                 'react-router-dom': {
                     singleton: true,
-                    eager: true,
                     requiredVersion: '6.21.3'
+                },
+                react: { 
+                    singleton: true,
+                    requiredVersion: '18.2.0'
+                },
+                'react-dom': { 
+                    singleton: true,
+                    requiredVersion: '18.2.0'
                 }
-            },
+            }
         }),
     ],
 };

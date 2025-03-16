@@ -2,5 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
-const container = document.getElementById('_user-details-dev-root');
-ReactDOM.render(<App />, container);
+const mount = (el) => {
+    ReactDOM.render(<App />, el);
+};
+
+if (process.env.NODE_ENV === 'development') {
+    const devRoot = document.querySelector('#root');
+    if (devRoot) {
+        mount(devRoot);
+    }
+}
+
+export { mount };
