@@ -45,9 +45,6 @@ module.exports = {
         new ModuleFederationPlugin({
             name: 'shell',
             filename: 'remoteEntry.js',
-            exposes: {
-                './EmitterContext': './src/App'
-            },
             shared: {
                 'react-router-dom': {
                     singleton: true,
