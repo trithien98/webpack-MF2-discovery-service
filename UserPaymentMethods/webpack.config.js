@@ -37,7 +37,6 @@ module.exports = {
     new ModuleFederationPlugin({
       name: 'UserPaymentMethodsMFE',
       filename: 'remoteEntry.js',
-      asyncStartup: true,
       exposes: {
         './MFE': './src/UserPaymentMethods',
       },

@@ -37,7 +37,6 @@ module.exports = {
     new ModuleFederationPlugin({
       name: 'UserDetailsMFE',
       filename: 'remoteEntry.js',
-      asyncStartup: true,
       exposes: {
         './MFE': './src/UserDetails'
       },
