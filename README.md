@@ -298,3 +298,7 @@ window.__FEDERATION__.__SHARE__.UserPaymentsMFE
 ```
 
 This inspection capability is essential for debugging and verifying proper sharing configuration in your micro-frontend architecture. 
+
+## Important Note About asyncStartup
+
+⚠️ As of today, the `asyncStartup` feature from `@module-federation/enhanced` only works with RSPack and is not compatible with webpack. If you're using webpack, you'll need to use alternative initialization approaches like `eager: true` or implement custom initialization logic.
