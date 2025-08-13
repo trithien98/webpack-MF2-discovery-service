@@ -1,16 +1,18 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const ProductDetails = () => {
+const ProductDetails = ({ productId }) => {
   const navigate = useNavigate();
-  const { id } = useParams();
+
+  // Convert productId to number since it comes as a string from useParams
+  const numericProductId = parseInt(productId, 10);
 
   // Mock product data - in a real app, this would come from an API
   const products = {
     1: {
       title: 'Cosmic Cat T-Shirt',
       price: '$25.99',
-      image: 'https://picsum.photos/seed/cat/600/600',
+      image: 'https://picsum.photos/seed/cosmic-cat/600/600',
       description: 'Embrace the cosmic feline energy with our signature Cosmic Cat T-shirt. This premium cotton blend features a stunning design of a cat floating through space, surrounded by stars and nebulae. Perfect for both cat lovers and astronomy enthusiasts!',
       sizes: ['S', 'M', 'L', 'XL', 'XXL'],
       colors: ['White', 'Black', 'Navy Blue'],
@@ -23,7 +25,7 @@ const ProductDetails = () => {
     2: {
       title: 'Pizza Ninja T-Shirt',
       price: '$23.99',
-      image: 'https://picsum.photos/seed/ninja/600/600',
+      image: 'https://picsum.photos/seed/pizza-ninja/600/600',
       description: "Who says ninjas can't enjoy pizza? This whimsical design features a stealthy ninja masterfully slicing a pizza with a katana. Made from 100% organic cotton, this shirt is as comfortable as it is funny.",
       sizes: ['S', 'M', 'L', 'XL'],
       colors: ['Black', 'Dark Grey', 'Red'],
@@ -35,7 +37,7 @@ const ProductDetails = () => {
     3: {
       title: 'Pixel Gaming T-Shirt',
       price: '$24.99',
-      image: 'https://picsum.photos/seed/pixel/600/600',
+      image: 'https://picsum.photos/seed/pixel-gaming/600/600',
       description: 'Take a trip down memory lane with our retro-inspired Pixel Gaming t-shirt. Featuring classic 8-bit graphics and a nostalgic design that will remind you of the golden age of gaming. Made with gamers in mind!',
       sizes: ['S', 'M', 'L', 'XL', 'XXL'],
       colors: ['Black', 'Grey', 'Navy'],
@@ -48,7 +50,7 @@ const ProductDetails = () => {
     4: {
       title: 'Robot DJ T-Shirt',
       price: '$26.99',
-      image: 'https://picsum.photos/seed/robot/600/600',
+      image: 'https://picsum.photos/seed/robot-dj/600/600',
       description: 'Drop the beat with our Robot DJ t-shirt! This futuristic design features a cool robot mixing tracks on a holographic deck. Made from premium cotton with a touch of stretch for comfort.',
       sizes: ['S', 'M', 'L', 'XL'],
       colors: ['Black', 'Electric Blue', 'Silver'],
@@ -59,10 +61,29 @@ const ProductDetails = () => {
     }
   };
 
-  const product = products[id];
+  const product = products[numericProductId];
 
   if (!product) {
-    return <h1>Product not found</h1>;
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center' }}>
+        <h1>Product not found</h1>
+        <p>Product ID: {productId} (converted to: {numericProductId})</p>
+        <button 
+          onClick={() => navigate('/catalogue')}
+          style={{
+            backgroundColor: '#4299e1',
+            color: 'white',
+            padding: '0.5rem 1rem',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginTop: '1rem'
+          }}
+        >
+          Back to Catalogue
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -91,6 +112,10 @@ const ProductDetails = () => {
               width: '100%', 
               borderRadius: '8px',
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+            }}
+            onError={(e) => {
+              e.target.src = 'https://picsum.photos/600/600';
+              e.target.alt = `${product.title} (fallback)`;
             }}
           />
         </div>
