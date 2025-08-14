@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getInstance } from '@module-federation/runtime-tools';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
