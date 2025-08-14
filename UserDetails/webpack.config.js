@@ -41,17 +41,23 @@ module.exports = {
         './MFE': './src/UserDetails'
       },
       shared: {
-        'react17': { 
-          import: 'react',
-          singleton: true,
-          requiredVersion: '17.0.2'
+        'react-router-dom': {
+            singleton: true,
+            requiredVersion: '6.21.3'
         },
-        'react17-dom': { 
-          import: 'react-dom',
-          singleton: true,
-          requiredVersion: '17.0.2'
+        react: { 
+            import: 'react',
+            shareScope: 'react17',
+            singleton: true,
+            requiredVersion: '17.0.2'
+        },
+        'react-dom': { 
+            import: 'react-dom',
+            shareScope: 'react17-dom',
+            singleton: true,
+            requiredVersion: '17.0.2'
         }
-      }
+      },
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html',

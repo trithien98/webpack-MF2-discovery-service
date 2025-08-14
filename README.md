@@ -96,12 +96,7 @@ This project demonstrates a micro-frontend architecture using Module Federation,
   ```
   This is specific to Module Federation 2.0's implementation and should not be taken as a general rule for all micro-frontend architectures. Other MFE implementations might work equally well with functional components and hooks.
 
-### 3. State Management
-- **Props-Based State**: Keeping state management simple with props helps avoid complexity and potential issues:
-  ```javascript
-  // Parent MFE
-  <ChildMFE data={this.state.data} onUpdate={this.handleUpdate} />
-  ```
+### 3. Micro-Frontends communication
 
 - **Event Emitter Usage**: Event emitters work well for cross-MFE communication when direct prop passing isn't feasible:
   ```javascript
@@ -136,84 +131,80 @@ This project demonstrates a micro-frontend architecture using Module Federation,
   );
   ```
 
-- **Error Boundaries**: Implement error boundaries to gracefully handle loading failures:
-  ```javascript
-  class ErrorBoundary extends React.Component {
-    state = { hasError: false };
-    static getDerivedStateFromError(error) {
-      return { hasError: true };
-    }
-    render() {
-      if (this.state.hasError) {
-        return <h2>Something went wrong.</h2>;
-      }
-      return this.props.children;
-    }
-  }
-  ```
-
-### 5. Common Gotchas
-- **Hook Issues with Module Federation 2.0**: React hooks can fail when using Module Federation 2.0 due to how it handles shared dependencies:
-  ```javascript
-  // Module Federation 2.0 specific issue
-  // This might fail due to how MF 2.0 handles React initialization
-  const [state, setState] = useState(initialState);
-  ```
-  
-  This is a specific limitation of Module Federation 2.0's implementation, not a general micro-frontend issue. Other MFE architectures or different versions of Module Federation might handle hooks differently. When using MF 2.0, always verify React is properly shared in your webpack configuration:
-  ```javascript
-  shared: {
-    react: { singleton: true },
-    'react-dom': { singleton: true }
-  }
-  ```
-
-- **React Instances**: Multiple React instances can cause the "Invalid hook call" error. Ensure proper sharing in webpack:
-  ```javascript
-  shared: {
-    react: { singleton: true, requiredVersion: deps.react },
-    'react-dom': { singleton: true, requiredVersion: deps['react-dom'] }
-  }
-  ```
-
-- **Context Sharing**: Context needs explicit setup across MFE boundaries, often requiring prop passing instead.
-
-- **Event Emitter Instances**: Ensure the same event emitter instance is used across all MFEs by passing it through props.
-
-### 6. Multiple React Versions
+### 5. Multiple React Versions
 
 One of the powerful features of Module Federation is the ability to run different React versions simultaneously in different MFEs. This is achieved through proper webpack configuration:
 
 - **Isolated React Instances**: Each MFE can use its own React version by removing it from the shared dependencies:
-  ```javascript
-  // MFE with isolated React 17
-  // webpack.config.js
+
+```javascript
+  // MFE using shared React 17 with custom shareScope
   new ModuleFederationPlugin({
     name: 'UserDetailsMFE',
     filename: 'remoteEntry.js',
     exposes: {
       './MFE': './src/UserDetails',
-    }
-    // No shared section - React lives in its own container
-  })
-
-  // MFE using shared React 18
-  // webpack.config.js
-  new ModuleFederationPlugin({
-    name: 'UserPaymentsMFE',
-    filename: 'remoteEntry.js',
-    exposes: {
-      './MFE': './src/UserPaymentMethods',
     },
     shared: {
-      react: { 
+      'react-router-dom': {
         singleton: true,
-        eager: true,
-        requiredVersion: '18.2.0'
+        requiredVersion: '6.21.3'
+      },
+      react: { 
+        import: 'react',
+        shareScope: 'react17',
+        singleton: true,
+        requiredVersion: '17.0.2'
       },
       'react-dom': { 
+        import: 'react-dom',
+        shareScope: 'react17-dom',
         singleton: true,
-        eager: true,
+        requiredVersion: '17.0.2'
+      }
+    }
+  })
+
+  // MFE using shared React 18 (App Shell pattern)
+  // webpack.config.js
+  new ModuleFederationPlugin({
+    name: 'HomeMFE',
+    filename: 'remoteEntry.js',
+    exposes: {
+      './MFE': './src/App'
+    },
+    shared: {
+      'react-router-dom': {
+        singleton: true,
+        requiredVersion: '6.21.3'
+      },
+      react: {
+        singleton: true,
+        requiredVersion: '18.2.0'
+      },
+      'react-dom': {
+        singleton: true,
+        requiredVersion: '18.2.0'
+      }
+    }
+  })
+
+  // App Shell (Host) configuration
+  // webpack.config.js
+  new ModuleFederationPlugin({
+    name: 'shell',
+    filename: 'remoteEntry.js',
+    shared: {
+      'react-router-dom': {
+        singleton: true,
+        requiredVersion: '6.21.3'
+      },
+      react: {
+        singleton: true,
+        requiredVersion: '18.2.0'
+      },
+      'react-dom': {
+        singleton: true,
         requiredVersion: '18.2.0'
       }
     }
@@ -253,52 +244,3 @@ One of the powerful features of Module Federation is the ability to run differen
   ```
 
 This configuration demonstrates how Module Federation enables true independence between MFEs, allowing different versions of core dependencies to coexist without conflict. 
-
-### 7. Inspecting Shared Resources
-
-Module Federation 2.0 provides a way to inspect shared resources through the browser's developer tools. All shared resources are available in:
-
-```javascript
-window.__FEDERATION__.__SHARE__
-```
-
-This object contains:
-- All shared dependencies organized by MFE name
-- Version information for each shared resource
-- Current state of shared modules
-
-For example, you can inspect:
-```javascript
-// See all shared resources for HomeMFE
-window.__FEDERATION__.__SHARE__.HomeMFE
-
-// See all shared resources for UserDetailsMFE
-window.__FEDERATION__.__SHARE__.UserDetailsMFE
-```
-
-This is particularly useful for:
-- Debugging shared dependencies
-- Verifying correct version sharing
-- Confirming proper isolation of React versions (e.g., React 17 vs 18)
-- Understanding how Module Federation manages shared resources at runtime
-
-Example of what you might see:
-```javascript
-window.__FEDERATION__.__SHARE__.UserDetailsMFE
-{
-  'react17': { /* React 17 instance details */ },
-  'react17-dom': { /* ReactDOM 17 instance details */ }
-}
-
-window.__FEDERATION__.__SHARE__.UserPaymentsMFE
-{
-  'react': { /* React 18 instance details */ },
-  'react-dom': { /* ReactDOM 18 instance details */ }
-}
-```
-
-This inspection capability is essential for debugging and verifying proper sharing configuration in your micro-frontend architecture. 
-
-## Important Note About asyncStartup
-
-⚠️ As of today, the `asyncStartup` feature from `@module-federation/enhanced` only works with RSPack and is not compatible with webpack. If you're using webpack, you'll need to use alternative initialization approaches like `eager: true` or implement custom initialization logic.
