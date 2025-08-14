@@ -210,37 +210,3 @@ One of the powerful features of Module Federation is the ability to run differen
     }
   })
   ```
-
-- **Benefits**:
-  - Each React version lives in its own container scope, not in global scope
-  - No version conflicts between different MFEs
-  - Enables gradual migrations (e.g., React 17 to 18)
-  - Teams can work independently with different React versions
-  - Perfect for testing new React versions in isolation
-
-- **Example Implementation**:
-  ```javascript
-  // Display React version in each MFE
-  import React from 'react';
-
-  class MyComponent extends React.Component {
-    render() {
-      return (
-        <div>
-          <div style={{
-            backgroundColor: '#f0f9ff',
-            padding: '0.5rem',
-            borderRadius: '4px',
-            marginBottom: '1rem',
-            display: 'inline-block'
-          }}>
-            React v{React.version}
-          </div>
-          {/* Rest of component */}
-        </div>
-      );
-    }
-  }
-  ```
-
-This configuration demonstrates how Module Federation enables true independence between MFEs, allowing different versions of core dependencies to coexist without conflict. 
