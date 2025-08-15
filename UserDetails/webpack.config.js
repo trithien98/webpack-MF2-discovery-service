@@ -41,10 +41,6 @@ module.exports = {
         './MFE': './src/UserDetails'
       },
       shared: {
-        'react-router-dom': {
-            singleton: true,
-            requiredVersion: '6.21.3'
-        },
         react: { 
             import: 'react',
             shareScope: 'react17',
@@ -53,7 +49,7 @@ module.exports = {
         },
         'react-dom': { 
             import: 'react-dom',
-            shareScope: 'react17-dom',
+            shareScope: 'react17',
             singleton: true,
             requiredVersion: '17.0.2'
         }

@@ -26,7 +26,7 @@ module.exports = {
         {
             test: /\.jsx?$/,
             loader: 'babel-loader',
-            exclude: /node_modules/,
+            exclude: '/node_modules/',
             options: {
             presets: ['@babel/preset-react'],
             },
@@ -42,11 +42,11 @@ module.exports = {
       shared: {
         react: { 
           singleton: true,
-          requiredVersion: '18.2.0',
+          requiredVersion: '18.2.0'
         },
         'react-dom': { 
           singleton: true,
-          requiredVersion: '18.2.0',
+          requiredVersion: '18.2.0'
         }
       }
     }),

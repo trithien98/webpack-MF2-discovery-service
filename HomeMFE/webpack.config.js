@@ -57,7 +57,7 @@ module.exports = {
                 },
                 'react-dom': { 
                     import: 'react-dom',
-                    shareScope: 'react17-dom',
+                    shareScope: 'react17',
                     singleton: true,
                     requiredVersion: '17.0.2'
                 }
