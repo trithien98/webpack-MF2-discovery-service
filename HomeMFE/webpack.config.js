@@ -49,13 +49,15 @@ module.exports = {
                     singleton: true,
                     requiredVersion: '6.21.3'
                 },
-                'react17': { 
+                react: { 
                     import: 'react',
+                    shareScope: 'react17',
                     singleton: true,
                     requiredVersion: '17.0.2'
                 },
-                'react17-dom': { 
+                'react-dom': { 
                     import: 'react-dom',
+                    shareScope: 'react17',
                     singleton: true,
                     requiredVersion: '17.0.2'
                 }

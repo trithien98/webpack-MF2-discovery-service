@@ -1,54 +1,104 @@
 import React from 'react';
-import { withRouter } from './withRouter';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import ProductDetails from './ProductDetails';
 
-class Catalogue extends React.Component {
-  handleViewDetails = (productId) => {
-    const { navigate } = this.props;
-    navigate(`/product/${productId}`);
+function Catalogue() {
+  const navigate = useNavigate();
+  const { productId } = useParams();
+
+  const handleViewDetails = (productId) => {
+    navigate(`/catalogue/${productId}`);
   };
 
-  render() {
-    const { location, params } = this.props;
-
-    return (
-      <div style={{ padding: '20px' }}>
-        <h1>Catalogue</h1>
-        <div>Current path: {location.pathname}</div>
-        {params.productId && <div>Viewing product: {params.productId}</div>}
-        
-        <div style={{ 
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '20px',
-          padding: '20px'
-        }}>
-          {[1, 2, 3, 4].map(id => (
-            <div key={id} style={{
-              border: '1px solid #ddd',
-              padding: '15px',
-              borderRadius: '8px',
-              textAlign: 'center'
-            }}>
-              <h3>Product {id}</h3>
-              <button 
-                onClick={() => this.handleViewDetails(id)}
-                style={{
-                  backgroundColor: '#4299e1',
-                  color: 'white',
-                  padding: '8px 16px',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer'
-                }}
-              >
-                View Details
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+  // If we have a productId parameter, show the product details
+  if (productId) {
+    return <ProductDetails productId={productId} />;
+  } else {
+    console.log('No productId found');
   }
+
+  // Otherwise show the product list
+  const products = [
+    { id: 1, title: 'Cosmic Cat T-Shirt', price: '$25.99', image: 'https://picsum.photos/seed/cosmic-cat/300/300' },
+    { id: 2, title: 'Pizza Ninja T-Shirt', price: '$23.99', image: 'https://picsum.photos/seed/pizza-ninja/300/300' },
+    { id: 3, title: 'Pixel Gaming T-Shirt', price: '$24.99', image: 'https://picsum.photos/seed/pixel-gaming/300/300' },
+    { id: 4, title: 'Robot DJ T-Shirt', price: '$26.99', image: 'https://picsum.photos/seed/robot-dj/300/300' },
+    { id: 5, title: 'Zombie Unicorn T-Shirt', price: '$27.99', image: 'https://picsum.photos/seed/zombie-unicorn/300/300' },
+    { id: 6, title: 'Taco Dragon T-Shirt', price: '$25.99', image: 'https://picsum.photos/seed/taco-dragon/300/300' }
+  ];
+
+  return (
+    <div style={{ 
+      maxWidth: '1200px', 
+      margin: '0 auto',
+      padding: '0 2rem'
+    }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Our T-Shirt Collection</h1>
+      
+      <div style={{ 
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '2rem',
+        padding: '1rem'
+      }}>
+        {products.map(product => (
+          <div key={product.id} style={{
+            border: '1px solid #ddd',
+            borderRadius: '8px',
+            padding: '1rem',
+            textAlign: 'center',
+            backgroundColor: 'white',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            transition: 'transform 0.2s ease-in-out'
+          }}>
+            <img 
+              src={product.image} 
+              alt={product.title}
+              style={{ 
+                width: '100%',
+                borderRadius: '4px',
+                marginBottom: '1rem'
+              }}
+              onError={(e) => {
+                e.target.src = 'https://picsum.photos/300/300';
+                e.target.alt = `${product.title} (fallback)`;
+              }}
+            />
+            <h3 style={{ marginBottom: '0.5rem' }}>{product.title}</h3>
+            <p style={{ 
+              fontSize: '1.2rem', 
+              fontWeight: 'bold', 
+              color: '#4299e1',
+              marginBottom: '1rem'
+            }}>
+              {product.price}
+            </p>
+            <button 
+              onClick={() => handleViewDetails(product.id)}
+              style={{
+                backgroundColor: '#4299e1',
+                color: 'white',
+                padding: '0.5rem 1rem',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                transition: 'background-color 0.2s ease-in-out'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#3182ce';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#4299e1';
+              }}
+            >
+              View Details
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
-export default withRouter(Catalogue); 
+export default Catalogue; 

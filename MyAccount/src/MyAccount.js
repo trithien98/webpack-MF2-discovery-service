@@ -1,37 +1,37 @@
-import React from 'react';
-import { loadRemote, init, registerRemotes } from '@module-federation/runtime';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
+import { getInstance } from '@module-federation/runtime-tools';
+
+// Get the instance once at module level
+const mfInstance = getInstance();
 
 const System = ({ request, emitter }) => {
   if (!request) return null;
   
-  const MFE = React.lazy(() => loadRemote(request).then(component => {
-    console.log('Loaded component:', component);
-    return component;
-  }));
+  const MFE = React.lazy(() => {
+    return mfInstance.loadRemote(request)
+      .then(component => ({ default: component.default || component }))
+      .catch(error => {
+        console.error(`Failed to load MFE: ${request}`, error);
+        throw error;
+      });
+  });
 
   return (
-    <React.Suspense fallback={<div style={{padding: '20px', background: '#eee'}}>
+    <Suspense fallback={<div style={{padding: '20px', background: '#eee'}}>
       Loading MFE...
     </div>}>
         <MFE emitter={emitter} />
-    </React.Suspense>
+    </Suspense>
   );
 };
 
-class MyAccount extends React.Component {
-  state = {
-    mfeRequests: [],
-    error: null,
-    isLoading: true
-  };
+function MyAccount({ emitter }) {
+  const [mfeRequests, setMfeRequests] = useState([]);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  async componentDidMount() {
+  const loadMfes = useCallback(async () => {
     try {
-
-      await init({
-        name: 'myAccount',
-      });
-
       const response = await fetch('http://127.0.0.1:8080/frontend-discovery.json');
       const data = await response.json();
 
@@ -40,7 +40,7 @@ class MyAccount extends React.Component {
         data.microFrontends.UserPaymentMethodsMFE[0],
       ];
 
-      await registerRemotes(
+      await mfInstance.registerRemotes(
         userMfes.map(mfe => ({
           name: mfe.extras.name,
           entry: mfe.url,
@@ -48,40 +48,41 @@ class MyAccount extends React.Component {
       );
 
       const requests = userMfes.map(mfe => `${mfe.extras.alias}/${mfe.extras.exposed}`);
-      console.log('Setting requests:', requests);
-      this.setState({ mfeRequests: requests, isLoading: false });
+      setMfeRequests(requests);
+      setIsLoading(false);
     } catch (err) {
       console.error('Error in loadMfes:', err);
-      this.setState({ error: err.message, isLoading: false });
+      setError(err.message);
+      setIsLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    loadMfes();
+  }, [loadMfes]);
+
+  if (error) {
+    return <div>Error loading account components: {error}</div>;
   }
 
-  render() {
-    const { mfeRequests, error, isLoading } = this.state;
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-    if (error) {
-      return <div>Error loading account components: {error}</div>;
-    }
-
-    if (isLoading) {
-      return <div>Loading...</div>;
-    }
-
-    return (
-      <div style={{ padding: '20px' }}>
-        <h1 style={{ marginBottom: '20px' }}>My Account</h1>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-          gap: '20px' 
-        }}>
-          {mfeRequests.map(request => (
-            <System key={request} request={request} emitter={this.props.emitter} />
-          ))}
-        </div>
+  return (
+    <div style={{ padding: '20px' }}>
+      <h1 style={{ marginBottom: '20px' }}>My Account</h1>
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+        gap: '20px' 
+      }}>
+        {mfeRequests.map(request => (
+          <System key={request} request={request} emitter={emitter} />
+        ))}
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default MyAccount;

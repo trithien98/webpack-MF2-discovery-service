@@ -46,19 +46,19 @@ module.exports = {
             name: 'shell',
             filename: 'remoteEntry.js',
             shared: {
-                'react-router-dom': {
-                    singleton: true,
-                    requiredVersion: '6.21.3'
-                },
-                react: {
-                    singleton: true,
-                    requiredVersion: '18.2.0'
-                },
-                'react-dom': {
-                    singleton: true,
-                    requiredVersion: '18.2.0'
+                    'react-router-dom': {
+                        singleton: true,
+                        requiredVersion: '6.21.3'
+                    },
+                    react: {
+                        singleton: true,
+                        requiredVersion: '18.2.0'
+                    },
+                    'react-dom': {
+                        singleton: true,
+                        requiredVersion: '18.2.0'
+                    }
                 }
-            }
         })
     ],
 };
